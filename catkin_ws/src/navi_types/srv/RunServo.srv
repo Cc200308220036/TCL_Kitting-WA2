@@ -1,0 +1,10 @@
+float32 max_speed
+float32 ratio
+float32 last_t
+string mode
+bool reset_ref
+---
+bool success
+string message
+float32 elapsed_time
+int32 iterations

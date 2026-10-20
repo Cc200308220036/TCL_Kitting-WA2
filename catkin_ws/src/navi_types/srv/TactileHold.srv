@@ -1,0 +1,7 @@
+bool TacHold   # 是否保持抓取
+string which_arm  # 哪个手臂
+---
+int8 status       #标准接口状态
+bool success     #True/False 是否成功
+
+

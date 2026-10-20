@@ -1,0 +1,10 @@
+# get trajectory service from target pose
+
+string which_arm                                # which_arm to grasp
+bool add_scene                                  # add scene to move group
+string grasp_mode                               # top2down, right2left, left2right front2back
+geometry_msgs/Pose tcp_in_sacrum                # tcp pose
+geometry_msgs/Pose obj_in_sacrum                # obj pose
+---
+bool success                                    # success flag
+trajectory_msgs/JointTrajectory ros_trajectory  # return ros trajectory

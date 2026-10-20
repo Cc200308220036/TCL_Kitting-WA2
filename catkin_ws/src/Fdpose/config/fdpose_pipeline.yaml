@@ -1,0 +1,21 @@
+# 读取代码：src/fdpose/pipeline/pipeline.py::FdposePipeline.from_ros_services。
+# 使用入口：tools/clients/test_pipeline.py（--config 可覆盖）或主程序调用 from_ros_services()。
+# 这是 Client 连接配置，不负责启动服务，不被 FDPose Service 自动读取。
+# 新版 FdposePipeline 的连接配置；不兼容旧在线 CLI 的 YAML 结构。
+# from_ros_services() 默认读取本文件；显式函数参数优先于这里的值。
+# 主程序直接注入 Client 实例时不读取本文件。
+
+# FDPose V2：Mesh 加载/卸载和位姿估计的服务名。
+mesh_service: /fdpose_v2/load_mesh
+pose_service: /fdpose_v2/pose_estimation
+
+# 新版 YOLO 实例分割服务，消息类型为 navi_types/InstSeg。
+# Client 固定从 naviai_yolo.ros.seg_service_client 导入，不在 YAML 指定代码路径。
+segmentation_service: /instance_segmentation_service
+
+# 等待服务就绪的秒数，必须为有限正数；不是单次推理的执行超时。
+timeout: 20.0
+
+# labels、RGB-D、是否加载 Mesh 和 TF 在 process_rgbd() 调用时传入。
+# 模型、相机内参和调试输出由各自服务的配置管理。
+# 深度补全 Client 暂由外部注入（或传入工厂及服务名），这里不猜测其导入路径。

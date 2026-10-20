@@ -1,0 +1,6 @@
+string which_arm
+bool add_scene
+std_msgs/Float32MultiArray joint_data
+---
+bool success
+trajectory_msgs/JointTrajectory ros_trajectory

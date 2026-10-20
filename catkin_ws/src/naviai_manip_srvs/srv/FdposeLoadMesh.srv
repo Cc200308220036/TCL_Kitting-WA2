@@ -1,0 +1,5 @@
+# load and unload fdpose meshes
+bool cancel
+string[] goods
+---
+bool success

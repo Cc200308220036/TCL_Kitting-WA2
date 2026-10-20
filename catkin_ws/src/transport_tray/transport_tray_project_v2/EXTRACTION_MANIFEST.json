@@ -1,0 +1,70 @@
+{
+  "sources": {
+    "transport_tray_project/README.md": "6817d0bffbb435f06826b5bee67d1c7e5159eb0962897a09a42d05b1e3520e84",
+    "transport_tray_project/screen_edge.py": "171033830034a7590d189a842a2f1890e4381679b6ea9e7761131875880d0231",
+    "transport_tray_project/config.py": "b9434b39326fe586f00bd35696d0cfc84684def73fb0c34c6584d8fc6c33e556",
+    "transport_tray_project/state.py": "228c915258ed855b5523d06922e0bfe15e65f21431bf18d1436c414b3f3cbe08",
+    "transport_tray_project/stage0.py": "5ff5c419f39ac5f482dff75c6a4d8efb11fe82e978fd6b6068c212875d8c5738",
+    "transport_tray_project/api.py": "c3a2bfa58edd34c940edcc6af7c172d1f656fe2e0bd1d312353c0397ac0ac85c",
+    "transport_tray_project/standalone_alignment.py": "4743aab1fc9f5def3c4d272b038f65f7c118f86103efc5484265239661c565b7",
+    "transport_tray_project/runtime.py": "814dacb89b5d3b8002f3e09eea64d9020e83f00e7d771e476344d38c20448215",
+    "transport_tray_project/telemetry.py": "5f52cbd5bf99d8d9d19df692be73f7e269b7c60ccdd865f0f276c20fe7e0fae9",
+    "transport_tray_project/types.py": "34640374d547b9bb3304d5168d6221a7d2466c12fa453d8151c3b27e9732767a",
+    "transport_tray_project/stage3_multi.py": "72689a6cf09047158276e939a9dd00efbf8b2426cf437b949a18ef6095d8d7f8",
+    "transport_tray_project/stage1.py": "0e0160a9b55db5b2c24f16e12a67fc28f1361df2d9875d43d11f4622edb81d33",
+    "transport_tray_project/moving_z_admittance.py": "5b2ee108fc7d10de12454bbb4fd946617253b47c58465d6b89b175eacf9f19a3",
+    "transport_tray_project/contact_alignment.py": "a6b6a5faa8f9b9b91d2d61d6be13e85a8bf7334c51081957d6481cfeb74dc2c3",
+    "transport_tray_project/stage2.py": "839b7e00ef5f319c7571c3f4f5ce30ea3e28b45dd6a7259d99db12c9d204981a",
+    "transport_tray_project/gripper.py": "d26e2ebbdc8c339dca6f4f0953c8c20acac1f9a1e20252777f0fe3816a1ff6e2",
+    "transport_tray_project/__init__.py": "bd25dc44adf6f85b48fdd8abdc123f843149e30f62a31813b889d57414262102",
+    "transport_tray_project/vision.py": "30ae5f94d93650842b6dbe741b8cf2720591c57af61718644b0d24827e125829",
+    "transport_tray_project/stage3.py": "155b9f4e7dbcfd276122f327af29ca70afa6ad1001cbc1dcfbcbf60962eca7ad",
+    "transport_tray_project/stage3_contact_alignment.py": "fcd69968b65f7092f1af096a35cdbe6a55c247be2712b6b12e07f88d735eec62",
+    "transport_tray_project/requirements.txt": "5bf2c17c83813c317dc36894be62259382715a026b6652669b192d42f81b8e10",
+    "transport_tray_project/deployment_dependencies.txt": "ba1a3d5967843d7c57abb468f4f9cff559c93ecfdc38181c1cbb8a21f54dc3fa",
+    "transport_tray_project/stage1_common.py": "0f78418e904fc791efdcd3708e834026afc82c75c2b6f3a3bcdedfcef8301df1",
+    "transport_tray_project/config/transport_tray.yaml": "0492b3f26117a2ba93727484b0d22ab6d2fad842320b91a403a83ef9be5cc468",
+    "transport_tray_project/config/contact_alignment.yaml": "097806c3b3e8b588bb9030dd11df0588dff32c4d657c162462cf0e9dc454ed53",
+    "test_stage0_stage1_pose_record.py": "665ce4e76a6f1fb035a88c336ab7d5b47190200a812820788cc732871b4b9369",
+    "test_stage2_waist_three_steps.py": "cdc4828f7ad8b9f32f134df16f51d360b1ae613e0511f4ea8e21678fe06a9d2e",
+    "test_stage3_single_z_place.py": "10c0a304d09d367c416259f925a1d73ba2432d9bba5395a6f893dbbbbccb94bc",
+    "test_stage3_multi_z_search_place.py": "63ab01922f2b2a2b1e094ca92dd2c945dc75c724d8d29cba9ee4f47dc4d92fae",
+    "examples/terminal.py": "19fb3f1ed39af84c3b8a3551e498c7ccad52488925daced47528f61b307d4cc2",
+    "stage0_calibration_tray_pose_yolo_depth_refine.json": "ec81daba210fc8c5c86d90bf18727a5e9597ab0a8b631739f994fe6c5b43ad78"
+  },
+  "omitted": [
+    "contact_alignment.py",
+    "stage3_contact_alignment.py",
+    "standalone_alignment.py",
+    "screen_edge.py",
+    "config/contact_alignment.yaml",
+    "single_layer.level",
+    "multi_layer.light_lift",
+    "SAM/legacy vision backends"
+  ],
+  "critical_control_ast_parity": {
+    "stage1_common.ForceApproachAxis": "c00d72cb3c9084c1cd982010fc55738daf9b323e1d8766a6704a61819473d76a",
+    "stage1_common.ContactDetector": "bfd397b0e3c85331cf9f88f9b548fd490ef1940a0367528ad2972a4dfb3b5e43",
+    "stage1_common.TrayYApproach.run_approach": "2ae4b0ebf918141c6cedbfe6a54e3126fc2ceabace7bfc36f63bab13f8c9f251",
+    "stage2.Stage2Lift.wait_for_target": "ff8378b0db820ec31a2680ad67cd9291bb3ba81371a94a630d489bdf86d4e709",
+    "stage2.Stage2Lift.wait_for_waist_target": "c9b7eca0d593f6fc76bf5022bc97b1c6444dd7c2da0ce88e7dc5d372037c617e",
+    "stage2.Stage2Lift.safety_check": "8821505df251f1765c8c1463bf34196b35e57c62aa8ca1a802c6df4c4c08e4e2",
+    "stage2.Stage2Lift.run_preplacement_movel": "ffef753d9cb11855aa2568988c8f256a688de5dd2cfa101863412cabf2442079",
+    "stage3.SwitchingZAdmittance": "dcf6fd26e882d5605008c69755aeb97ada7fcb0dccd508049617d858e8c30de7",
+    "stage3.TargetForceLatch": "7866e423cae9f67401a5de01ae4b47ad9d2a4898e2f25c953c29af8b8c4234a5",
+    "stage3.Stage3Place.run_compliant_descent_and_release": "58780656c3e0b8aa36a86738ff9cc911fcc1bb80f1f8659eca95730ccf83b03f",
+    "stage3.Stage3Place.wait_movel_target": "bdfae3adc35e6411c53f5be61d9653b7a80218160490604ab14c7dfa5b850e71",
+    "moving_z_admittance.MovingZParameters": "8d6a41e7990af9987654a33b4d01c3e34f039ac67b599fa5995bb6aea2e257bb",
+    "moving_z_admittance.MovingZAxis": "03ad48cec2d4de2a413dea746d19144b92a756c0b95b1fe14e08750dda14d7d4"
+  },
+  "test_snapshot_parameters": {
+    "lift_height_m": 0.01,
+    "xy_offset_m": [
+      0.0,
+      -0.004
+    ],
+    "waist_speed": 0.5,
+    "waist_acceleration": 0.1,
+    "yaw_range_deg": 3.0
+  }
+}

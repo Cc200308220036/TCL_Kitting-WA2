@@ -1,0 +1,131 @@
+# 单位：距离m、速度m/s、加速度m/s²、力N、时间s；其他单位见各项注释。
+common:  # 各阶段共用配置
+  vision:  # 托盘视觉识别
+    vision_backend: tray-pose-yolo  # 视觉后端，当前固定使用此方案
+    label: white_tray  # 待识别托盘类别，需与标定一致
+    yolo_label: null  # YOLO类别；null沿用label
+    tray_pose_camera_to_head: assets/camera_to_head.npy  # 相机到头部的外参文件
+    tray_pose_rgbd_timeout: 15.0  # 等待RGB-D图像的最长时间(s)
+  paths:  # 相对路径以tray_control目录为基准
+    state_file: runtime/tray_state.json  # 层号、抓取关系和阶段状态
+    force_log_dir: ../logs/stage3  # 多层Stage3力数据CSV目录
+    calibration_file: calibration/stage0_calibration_tray_pose_yolo_depth_refine.json  # 预抓取标定文件
+  stage0:  # 视觉预抓取
+    symmetry_enabled: true  # 将托盘180°对称姿态对齐标定；当前须为true
+  stage1:  # 沿双TCP连线向内导纳抓取
+    hand_settle_seconds: 1.5  # 闭爪成功后的稳定等待(s)
+    target_force_n: 0.7  # 每侧向内接触目标力(N)
+    contact_threshold_n: 0.5  # 判定已接触的力阈值(N)
+    contact_debounce_s: 0.1  # 接触持续多久才确认(s)
+    contact_release_debounce_s: 0.3  # 力下降后解除接触的等待(s)
+    force_band_n: 0.1  # 闭爪触发力相对目标的下浮量(N)
+    imbalance_band_n: 0.5  # 左右力差一半的允许值(N)
+    virtual_mass_kg: 2.0  # 虚拟质量(kg)，越大速度响应越缓
+    damping_ns_m: 80.0  # 阻尼(N·s/m)，越大越抑制运动
+    max_retreat_distance_m: 0.003  # 相对靠拢起点允许的最大外退量(m)
+    target_ramp_seconds: 1.0  # 目标力从零升到设定值的时间(s)
+    stable_seconds: 0.2  # 双侧力满足条件后多久启动闭爪(s)
+    bias_seconds: 1.0  # 无接触力零偏采样时间(s)
+    filter_cutoff_hz: 5.0  # 力低通截止频率(Hz)，越低越平滑
+    stale_timeout_s: 0.2  # 反馈允许的最大延迟(s)
+    tracking_error_limit_m: 0.015  # TCP实测位置与指令的最大偏差(m)
+    left_gripper_service: /zj_humanoid/jodell_rag_left/grasp  # 左夹爪服务
+    right_gripper_service: /zj_humanoid/jodell_rag_right/grasp  # 右夹爪服务
+    gripper_profile: 0  # 夹爪驱动的动作模式编号
+    gripper_initial_position_mm: 35.0  # 靠拢前夹爪开度(mm)
+    gripper_close_position_mm: 17.0  # 闭爪目标开度(mm)，夹物时可不到位
+    gripper_force_percent: 0.0  # 夹爪力度指令(%)，0的含义由驱动决定
+    gripper_wait_timeout_s: 5.0  # 单次夹爪服务等待上限(s)
+    max_inward_distance_m: 0.08  # 每侧最大向内靠拢距离(m)
+    duration_s: 90.0  # 靠拢抓取阶段最长运行时间(s)
+  stage2:  # 抬升及多层预放置
+    orientation_tolerance_deg: 1.0  # 持物视觉采集期间允许的TCP姿态变化(°)
+    lift_heights_by_layer:  # 各层默认抬升高度(m)；main的--lift-cm会覆盖
+    - 0.03  # 第一层
+    - 0.04  # 第二层
+    - 0.065  # 第三层
+    tcp_tolerance: 0.003  # 持物视觉采集期间允许的TCP位移(m)
+    relative_position_limit: 0.005  # P_pre规划时左右TCP反算中心的最大差(m)
+  stage3:  # 放置：初始接触、张爪和共用反馈
+    descent_motion:  # 最终生效限速/加速度，无隐式倍增
+      single:  # 单层初始接触
+        speed: 0.006  # 单层初始下降及接触退让限速(m/s)
+        acceleration: 0.02  # 单层初始运动加速度上限(m/s²)
+      multi:  # 多层初始接触
+        speed: 0.003  # 多层初始下降及接触退让限速(m/s)
+        contact_speed: 0.003  # 原恒力模型接触限速；当前初始找平不使用
+        acceleration: 0.02  # 多层初始运动加速度上限(m/s²)
+    target_force: 2.0  # 接触锁存及回程/Yaw目标力(N)；初始退让见stage3.py的CONTACT_RETREAT_DISTANCE_M
+    left_z_force_sign: 1.0  # 左腕Z力方向，+1或-1
+    right_z_force_sign: 1.0  # 右腕Z力方向，+1或-1
+    # 以下保留原恒力模型及后续判定参数；当前初始找平不走恒力保持。
+    contact_threshold: 0.5  # 原导纳接触参考阈值(N)，用于切换接触限速
+    control_margin: 0.1  # 初始下降期望力在目标力上增加的裕量(N)
+    force_hold_band: 0.3  # 达标锁存解除迟滞(N)：低于目标减此值才开始解除计时
+    hold_force_band: 0.5  # 原恒力找平暂停另一侧的力误差阈值(N)
+    hold_spring_k: 100.0  # 原恒力保持弹簧刚度(N/m)
+    hold_integral_gain: 0.0002  # 原保持侧平衡点积分增益(m/(N·s))
+    hold_max_correction: 0.006  # 原保持侧相对锁定位置的最大微调量(m)
+    hold_max_speed: 0.001  # 原保持侧微调限速(m/s)
+    target_reach_debounce: 0.1  # 达标锁存进入去抖(s)，初始单次接触锁存不使用
+    target_release_debounce: 0.2  # 达标锁存解除去抖(s)，初始单次接触锁存不使用
+    imbalance_limit: 0.5  # 非初始阶段左右支撑力差一半的允许值(N)
+    stable_seconds: 0.3  # 多层初始双侧接触锁存后的等待(s)
+    mass: 2.0  # 初始/原恒力模型虚拟质量(kg)
+    damping: 100.0  # 初始/原恒力模型阻尼(N·s/m)
+    filter_cutoff: 5.0  # Z支撑力低通截止频率(Hz)
+    baseline_seconds: 1.0  # 悬空持物负载基线采样时间(s)
+    stale_timeout: 0.2  # 腕力及机器人反馈允许的最大延迟(s)
+    tracking_error_limit: 0.015  # TCP实测位置与指令的最大偏差(m)
+    hand_open_settle_seconds: 1.0  # 双爪张开成功后的稳定等待(s)
+    left_gripper_service: /zj_humanoid/jodell_rag_left/grasp  # 左夹爪服务
+    right_gripper_service: /zj_humanoid/jodell_rag_right/grasp  # 右夹爪服务
+    gripper_profile: 0  # 夹爪驱动的动作模式编号
+    gripper_open_position_mm: 35.0  # 放置后张爪目标开度(mm)
+    gripper_force_percent: 0.0  # 夹爪力度指令(%)，0的含义由驱动决定
+    gripper_wait_timeout: 5.0  # 单次夹爪服务等待上限(s)
+multi_layer:  # 第二层及以上的预放置与寻槽
+  preplace:  # 根据上一层顶面规划放置目标
+    held_tray_pose_from_tcp: true  # true双TCP反算持物位姿；false使用视觉
+    stack_pitch: 0.033  # P_place比上一层顶面高多少(m)
+    preplace_clearance: 0.02  # P_pre比P_place额外抬高多少(m)
+    max_preplace_translation: 0.6  # 到P_pre的XY/Z分段平移及额外XY偏置上限(m)
+  search:  # 多层XY寻槽、回最低点和Yaw搜索
+    search_paths:  # 路线尺寸(m)，通过--search-path选择
+      square:  # 方形回字路线
+        radius: 0.01  # 方形最远角点到中心的距离(m)
+        ring_step: 0.002  # 相邻方环的半边长增量(m)
+      circle:  # 同心圆路线
+        radius: 0.01  # 最外圆半径(m)
+        ring_step: 0.001  # 相邻圆的半径增量(m)
+      spiral:  # 螺旋路线
+        radius: 0.005  # 螺旋最大半径(m)
+        pitch: 0.003  # 螺旋每转一圈的半径增量(m)
+    search_z_speed_limit: 0.003  # XY寻槽共同Z上退限速(m/s)
+    search_z_acceleration: 0.01  # XY寻槽共同Z上退加速度(m/s²)
+    search_z_down_speed: 0.0075  # XY寻槽共同Z下降限速(m/s)
+    search_z_down_acceleration: 0.02  # XY寻槽共同Z下降加速度(m/s²)
+    search_z_target_force: 1.3  # XY寻槽Z目标力(N)，相对持物基线
+    search_z_recovery_hysteresis: 0.2  # 较大侧降至目标减此值后，允许再次上退(N)
+    search_z_retreat_distance: 0.0007  # XY暂停后双侧共同上退距离(m)
+    search_z_retreat_trigger_cycles: 3  # 连续超目标多少周期触发退让；未超则清零
+    xy_force_capture_threshold:  # 任一侧相对寻槽起点的|ΔFx|/|ΔFy|捕获阈值(N)
+    - 2.0  # 第二层
+    - 3.5  # 第三层
+    direct_seating_distance: 0.001  # 初始接触后距P_place的3D距离小于此值可直接落座(m)
+    direct_seating_max_z_difference: 0.005  # 直接落座允许的左右下降量差(m)
+    radius_return_xy_speed: 0.002  # 返回历史最低点的XY限速(m/s)
+    radius_z_acceleration: 0.02  # 回程/Yaw共同Z加速度上限(m/s²)
+    radius_z_down_speed: 0.002  # 回程/Yaw共同Z下降限速(m/s)
+    radius_z_retreat_speed: 0.001  # 回程/Yaw共同Z上退限速(m/s)
+    radius_yaw_speed_deg_s: 0.3  # Yaw扫描速度(°/s)
+    radius_yaw_range_deg: 3.0  # Yaw正负扫描范围(°)
+    radius_yaw_timeout: 50.0  # Yaw搜索最长时间(s)，超时走未确认释放
+    radius_yaw_extra_descent: 0.0005  # Yaw捕获所需的额外下沉量(m)
+    vision_settle: 0.5  # 撤离后视觉采图前等待(s)
+    search_timeout: 40.0  # XY基础时限(s)，方形/圆形自动重算；退让暂停不计入
+    tray_fusion_position_limit: 0.015  # 双TCP反算位置差扣除指令Z差后的允许值(m)
+    tray_fusion_yaw_limit_deg: 3.0  # 双TCP反算托盘Yaw的最大差(°)
+    seated_stable_seconds: 0.2  # 直接落座平均支撑力达标后等待(s)
+    slot_min_descent: 0.003  # 相对XY寻槽起点下沉达到此值即捕获(m)
+    yaw_descent_debounce: 0.2  # Yaw下沉捕获条件需持续的时间(s)

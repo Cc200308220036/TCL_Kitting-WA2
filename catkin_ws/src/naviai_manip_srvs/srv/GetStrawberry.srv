@@ -1,0 +1,5 @@
+naviai_manip_msgs/Strawberry strawberry
+string action
+---
+bool finish
+int8 remaining

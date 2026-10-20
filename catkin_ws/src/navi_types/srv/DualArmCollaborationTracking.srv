@@ -1,0 +1,9 @@
+# Request
+float64[] target_joint_position_r
+float64 dt
+float64 T
+float64[] q_ref   # IK用，参考关节值
+---
+# Response
+bool success
+string message

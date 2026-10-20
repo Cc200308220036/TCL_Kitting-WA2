@@ -1,0 +1,95 @@
+# 读取代码：src/fdpose/ros/server_config.py::load_server_config，由 server_v2.py 初始化时调用。
+# 运行入口：python scripts/pose_estimator_track_node_roi_v2.py；_config_path:=/路径/config.yaml 可替换本文件。
+# 类型约定：布尔写 true/false，数字不加引号；非法类型/范围会阻止启动，未知键会告警。
+# FDPose V2 Server 默认配置。
+# 启动时会自动读取本文件；同名 ROS 私有参数可以临时覆盖这里的值。
+# 配置优先级：ROS 私有参数 > 本 YAML > 代码默认值。
+
+# -------------------- FoundationPose 推理 --------------------
+
+# 单次位姿注册时的姿态细化迭代次数。
+# 次数越大通常越慢，可能提高最终精度；正式推理默认使用 3 次。
+est_refine_iter: 3
+
+# 是否根据当前物体 Mask 裁剪 ROI 后再推理。
+# true：只处理物体附近区域，通常更快；false：使用完整 RGB-D 图像。
+use_roi: true
+
+# ROI 在 Mask 包围框上、下、左、右额外扩展的像素数。
+# 仅在 use_roi=true 时生效；过小可能裁掉物体边缘，过大则增加计算量。
+roi_margin: 40
+
+# Mask 至少需要包含的前景像素数。
+# 小于该值时认为检测结果不可靠，本次目标不会进入 FoundationPose。
+min_mask_pixels: 50
+
+# -------------------- Mask 内深度有效性检查 --------------------
+
+# Mask 内允许参与推理的最小深度，单位：米。
+# 小于该值的深度通常属于无效值或相机近距离噪声。
+min_depth_m: 0.05
+
+# Mask 内允许参与推理的最大深度，单位：米。
+# 大于该值的深度不计入有效深度像素。
+max_depth_m: 3.0
+
+# Mask 内至少需要具备的有效深度像素数量。
+# 有效深度不足时跳过该目标，避免无效深度导致错误 Pose。
+min_valid_depth_pixels: 50
+
+# 有效深度像素至少占 Mask 总像素的比例，取值范围：[0, 1]。
+# 0.02 表示至少 2%；实际要求会取该比例与 min_valid_depth_pixels 中较严格者。
+min_valid_depth_ratio: 0.02
+
+# -------------------- 调试文件与可视化 --------------------
+
+# 是否保存请求的 RGB、原值 Depth、有效解码的 Mask 和各实例处理结果。
+# 写入 runtime/debug/<启动时间戳>/raw/<请求编号>/，不再按 label 覆盖。
+save_debug_files: true
+
+# 是否保存相机图像上的物体坐标轴和 Mesh 三维包围框可视化。
+# 写入同一运行目录的 vis/<请求编号>_<实例编号>_pose_<label>.png。
+save_axis_vis: true
+
+# 独立保存三联图：位姿图 + 模型表面点投影 + 输入深度伪彩色图。
+# 文件名为 <请求编号>_<实例编号>_montage_<label>.png。
+# 不依赖上面两个开关；默认关闭以减少绘制/编码/磁盘耗时。
+# 每栏最大宽度 640，点云最多 2000 个采样点，首次绘制后随 Mesh 缓存。
+# 深度色条范围沿用 min_depth_m / max_depth_m（米），无效深度显示黑色。
+save_debug_montage: false
+
+# 三个开关全关时不创建调试目录；旧数据不自动删除。
+# 保存同步执行，总耗时计入 Service 响应；DEBUG 日志单独统计保存耗时。
+# 新文件权限 0644、新目录 0755；不修改已有父目录的权限。
+
+# 可视化坐标轴长度，单位：米。只影响图片中坐标轴的显示长度。
+axis_vis_scale: 0.1
+
+# 可视化坐标轴和包围框线宽，单位：像素。
+axis_vis_thickness: 3
+
+# -------------------- 相机配置 --------------------
+
+# 相机标定目录，其中必须包含 intrinsic_data.npz，并在其中保存 3x3 内参 K。
+# 可以使用绝对路径；相对路径以 FDPose 项目根目录为基准。
+# 输入 RGB-D 的分辨率必须与该相机内参匹配。
+camera_info_dir: config/camera
+
+# -------------------- ROS Service 名称 --------------------
+
+# 物体位姿估计 Service。输入 RGB、Depth、Mask，返回成功目标的物体 Pose。
+pose_service_name: /fdpose_v2/pose_estimation
+
+# Mesh 管理 Service。负责按 Label 加载、清除或从外部路径加载 Mesh。
+mesh_service_name: /fdpose_v2/load_mesh
+
+# -------------------- 启动前向预热 --------------------
+
+# 是否在注册 ROS Service 前，使用固定 RGB-D 样例执行一次完整前向。
+# true 会增加 Server 启动时间，但可减少第一次正式 Pose 请求的初始化耗时。
+# 建议先在目标 GPU 上验证预热正常，再设为 true。
+warmup_enabled: false
+
+# 固定预热样例目录，其中必须包含 warmup.yaml 及其引用的 RGB、Depth、Mask、K。
+# 可以使用绝对路径；相对路径以 FDPose 项目根目录为基准。
+warmup_dir: assets/warmup/wp_2

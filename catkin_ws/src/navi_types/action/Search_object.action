@@ -1,0 +1,10 @@
+# Goal
+string[] labels  
+
+---
+# Result
+bool success
+
+---
+# Feedback
+string info

@@ -1,0 +1,7 @@
+# 请求：外部调用时需要传入的参数
+string target_label    # 抓取目标标签（如"screw"）
+bool robot_exec        # 是否执行实际机器人运动（true=执行，false=模拟）
+---
+# 响应：服务返回的结果
+bool success           # 抓取是否成功
+

@@ -1,0 +1,35 @@
+
+# Python缓存
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Catkin编译产物
+catkin_ws/build/
+catkin_ws/devel/
+catkin_ws/install/
+catkin_ws/logs/
+.catkin_tools/
+
+# 运行数据
+**/runs/
+**/runtime/
+**/logs/
+**/debug_logs/
+**/analysis/
+*.log
+
+# IDE和临时文件
+.vscode/
+.idea/
+.DS_Store
+.Trash-*/
+*.tmp
+*.swp
+*.swo
+*~
+
+# 本地模型权重
+catkin_ws/src/Fdpose/assets/checkpoints/
+catkin_ws/src/Fdpose/assets/onnx/

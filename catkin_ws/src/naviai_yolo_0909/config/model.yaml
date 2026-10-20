@@ -1,0 +1,13 @@
+# 实例分割模型路径
+# seg_model_path: 'models/best_wrc.pt'
+seg_model_path: 'models/best_white_tray_screen.pt'
+
+# 模型推理相关参数
+imgsz: 640  # 1280  # 模型推理的尺寸
+conf: 0.8  # 模型结果过滤的置信度
+
+# 仅由 Server 保存；修改后重启 Server 生效，两个开关相互独立。
+debug:
+  output_dir: data/seg  # 源码运行相对包根；安装后相对 ROS_HOME/包名；也可填绝对路径
+  save_records: false  # 原始 RGB、原值深度、二值 Mask、检测结果与元数据
+  save_visualizations: true  # 每帧一张 RGB + 全部实例 Mask/bbox/label 叠加图

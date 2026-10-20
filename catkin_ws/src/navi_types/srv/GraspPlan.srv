@@ -1,0 +1,11 @@
+# grasp pose planning service 
+
+string which_hand   # use left or right hand, candidate values are left, right
+sensor_msgs/Image color_image    # color image of scene
+sensor_msgs/Image depth_image    # depth image of scene
+string grasp_mode                # grasp mode, right2left, left2right, front2back, top2down, same
+navi_types/ObjPose object_pose      # object pose in camera frame, including object labels and estimated poses 
+---
+int32 status
+navi_types/Grasp6d[] grasps       # grasp pose of dexterous hand base frame in camera frame
+navi_types/Grasp6d[] pre_grasps   # grasp pose of dexterous hand base frame in camera frame

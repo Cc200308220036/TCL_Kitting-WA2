@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+pose_record_runs/
+logs/
+tray_control/runtime/
+!/README.md

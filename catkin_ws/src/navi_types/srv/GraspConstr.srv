@@ -1,0 +1,5 @@
+string which_hand
+string object_name
+---
+int32 status
+string file_path

@@ -1,0 +1,4 @@
+numpy
+scipy
+PyYAML
+# ROS环境另外提供rospy、geometry_msgs、rosservice、naviai_controller及tray_pose/Fdpose

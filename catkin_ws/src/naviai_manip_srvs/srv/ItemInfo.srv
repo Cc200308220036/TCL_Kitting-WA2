@@ -1,0 +1,9 @@
+# 请求部分
+Header header       # 请求头
+int32 item_kinds    # 商品种类
+string place_method     # people or table
+naviai_manip_msgs/SingleItemInfo[] item_info # 商品信息
+---
+# 响应部分
+bool success        # 是否成功
+string status       # 状态码

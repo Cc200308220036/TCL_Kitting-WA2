@@ -1,0 +1,5 @@
+
+chest_camera_param: [1280, 720, 910.21630859375, 910.31884765625, 654.1122436523438, 372.575927734375]  # red机器人胸口相机内参
+# 相机话题
+camera_rgb_topic: /zj_humanoid/sensor/realsense_head/color/image_raw
+camera_depth_topic: /zj_humanoid/sensor/realsense_head/aligned_depth_to_color/image_raw

@@ -1,0 +1,7 @@
+# get trajectory service from target pose
+
+string which_arm                                # which_arm to grasp
+geometry_msgs/Pose[] waypoints                  # waypoints
+---
+int32 status                                      # std status code
+trajectory_msgs/JointTrajectory ros_trajectory  # return ros trajectory

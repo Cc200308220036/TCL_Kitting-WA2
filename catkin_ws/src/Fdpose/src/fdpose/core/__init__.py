@@ -1,0 +1,1 @@
+"""Core FoundationPose inference implementation."""

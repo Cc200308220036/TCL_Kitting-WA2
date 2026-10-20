@@ -1,0 +1,7 @@
+---
+bool success    # 是否成功
+string message  # 返回消息（如成功或失败的原因）
+float32 accelerometer_noise_density     # 加速度计噪声密度 (m/s^2/√Hz)
+float32 gyroscope_noise_density         # 陀螺仪噪声密度 (rad/s/√Hz)
+float32 accelerometer_bias_random_walk  # 加速度计偏置随机游走 (m/s^2/√s)
+float32 gyroscope_bias_random_walk      # 陀螺仪偏置随机游走 (rad/s/√s)

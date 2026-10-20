@@ -1,0 +1,6 @@
+# naviai manipulation scene update service
+
+string[] obstacle_names    # 加载的模型名称
+---
+int32 status           # 标准状态接口
+

@@ -1,0 +1,9 @@
+# Goal 
+navi_types/ObjPose obj_pose 
+---
+# Result
+bool success
+string hand
+---
+# Feedback
+string info    

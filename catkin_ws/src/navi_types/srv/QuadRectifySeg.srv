@@ -1,0 +1,9 @@
+# QuadRectify 分割服务: 内部调 InstSeg(YOLO) 得到 mask, 再做四边拟合填满
+
+string[] labels            # 需要分割的物体 label 列表
+sensor_msgs/Image color_image    # 场景彩色图
+sensor_msgs/Image depth_image    # 场景深度图
+string[] rectify_labels          # 需要做四边拟合填满的 label (其余 label 原样返回)
+---
+bool have_objs                  # 是否检测到目标
+navi_types/QuadItem[] items     # 每个目标: label, mask(填满), 四角, 中心, 方向

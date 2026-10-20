@@ -1,0 +1,10 @@
+string state
+string tool
+string message
+string failure_code
+bool cns_ready
+bool motion_enabled
+bool rolled_back
+float32 elapsed_time
+int32 iterations
+time stamp

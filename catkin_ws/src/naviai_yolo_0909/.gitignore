@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.DS_Store
+build/
+devel/
+install/
+data/debug_images/
+data/seg/
+data/rgbd_captures/

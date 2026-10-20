@@ -1,0 +1,5 @@
+navi_types/Strawberry strawberry
+string action
+---
+bool finish
+int8 remaining

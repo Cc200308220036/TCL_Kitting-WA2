@@ -1,0 +1,57 @@
+# 读取代码：tools/manage_services.py；运行入口：bash scripts/manage_services.sh start。
+# 默认配置为本文件，可用 start --config /路径/services.yaml 覆盖。
+# 这是 Python 进程管理器的部署配置；scripts/manage_services_bash.sh 不读取本文件。
+# 服务进程部署配置，仅 manage_services.sh start 读取。
+# 与 fdpose_pipeline.yaml（Client 连接配置）不同；两处的 ROS 服务名需自行保持一致。
+# 控制端需 Python 3 + PyYAML；执行目标必须是 Linux，容器侧只需系统 Python 3。
+# 所有环境和 setup 路径请按实际机器修改；容器必须已经启动，不在这里创建/启动容器。
+services:
+  yolo:
+    enabled: true
+    container: ""  # 留空：当前环境；填现有 Docker 容器名称或 ID：在该容器内运行
+    manager_python: python3  # 容器内用于 PID 管理的系统 Python，不是模型推理环境
+    work_dir: ../naviai_yolo_0909  # 当前环境下相对 FDPose 根目录；Docker 时必须填容器内绝对路径
+    runtime_dir: runtime          # 当前环境下相对 FDPose 根目录；Docker 时必须填容器内绝对路径
+    conda_sh: /opt/conda/etc/profile.d/conda.sh
+    conda_env: seg
+    # 若使用 venv，删除 conda_env/conda_sh，改填 venv: /absolute/path/to/venv
+    setup_files:  # 按顺序 source；请填写实际 ROS 和 Catkin 工作空间路径
+      - /opt/ros/noetic/setup.bash
+      - /root/catkin_ws/devel/setup.bash
+    pythonpath: [src]  # 相对 work_dir；加入已有 PYTHONPATH 前端，保证可以 import 新版包
+    python: python
+    script: scripts/seg_service/seg_service_server.py  # 相对 work_dir，也可以是绝对路径
+    args: []  # 例如 ["_model_config:=/absolute/path/model.yaml"]，每个参数单独一个字符串
+    env: {}   # 可填 ROS_MASTER_URI、ROS_IP 等；不硬编码 IP，也不自动启动 roscore
+
+  fdpose:
+    enabled: true
+    container: ""
+    manager_python: python3
+    work_dir: .
+    runtime_dir: runtime
+    conda_sh: /opt/conda/etc/profile.d/conda.sh
+    conda_env: fdpose
+    setup_files:
+      - /opt/ros/noetic/setup.bash
+      - /root/catkin_ws/devel/setup.bash
+    pythonpath: [src]
+    python: python
+    script: scripts/pose_estimator_track_node_roi_v2.py
+    args: []  # 例如 ["_config_path:=/absolute/path/fdpose_server_v2.yaml"]
+    env: {}
+
+  depth_refine:
+    enabled: false  # 实际路径尚未确定；填写完整部署信息后再启用
+    container: ""
+    manager_python: python3
+    work_dir: /absolute/path/to/depth_module
+    runtime_dir: runtime
+    conda_sh: /opt/conda/etc/profile.d/conda.sh
+    conda_env: depth
+    setup_files: []
+    pythonpath: [src]
+    python: python
+    script: path/to/depth_service.py
+    args: []
+    env: {}

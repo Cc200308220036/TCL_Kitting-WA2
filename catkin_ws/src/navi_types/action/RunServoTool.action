@@ -1,0 +1,36 @@
+# Goal
+string tool
+string profile
+
+# Optional debug overrides.
+# Empty strings use config defaults.
+# Non-positive numeric values use config defaults.
+float32 max_speed
+float32 last_t
+string mode
+float32 ratio
+float32 z_limit
+float32 xy_limit
+
+# -1 uses config default, 0 false, 1 true.
+int8 rollback_on_limit
+
+# Empty string uses selected tool default reference.
+string ref_name
+---
+# Result
+bool success
+string tool
+string message
+string failure_code
+bool rolled_back
+float32 elapsed_time
+int32 iterations
+float32 final_error
+---
+# Feedback
+string state
+float32 elapsed_time
+int32 iterations
+float32 current_error
+string message

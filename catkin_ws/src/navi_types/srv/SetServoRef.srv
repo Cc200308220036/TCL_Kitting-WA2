@@ -1,0 +1,6 @@
+string rgb_path
+string mask_path
+float32 depth_hint
+---
+bool success
+string message

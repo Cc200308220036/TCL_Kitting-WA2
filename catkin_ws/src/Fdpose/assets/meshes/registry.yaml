@@ -1,0 +1,22 @@
+# 读取代码：src/fdpose/ros/server_utils.py::read_mesh_config（V1/V2 服务使用）；公共 Client 的资产工具也会读写。
+# 运行入口：scripts/pose_estimator_track_node_roi_v2.py；Client 调用 load_mesh(label) 时服务端按本表查找。
+# native/tensorrt/compare_pose_backends.py 也读取本表；meshes 必须是映射，每个 Label 必须提供非空 path。
+# Detection label -> canonical mesh asset. Paths are relative to assets/meshes.
+meshes:
+  vio_medium:
+    path: objects/vio_medium/model.ply
+  screw:
+    path: objects/screw/model.obj
+  # wp_1 and wp_a intentionally share the same canonical mesh.
+  wp_1:
+    path: objects/wp_a/model.ply
+  wp_2:
+    path: objects/wp_2/model.ply
+  screw_dt:
+    path: objects/screw_dt/model.obj
+  wp_a:
+    path: objects/wp_a/model.ply
+  white_tray:
+    path: objects/white_tray/model.ply
+  connector_mod:
+    path: unregistered/connector_mod.ply

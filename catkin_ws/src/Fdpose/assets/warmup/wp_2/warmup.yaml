@@ -1,0 +1,25 @@
+# 读取代码：src/fdpose/ros/server_v2.py::_run_warmup；仅在服务配置 warmup_enabled=true 时预热。
+# 运行入口：scripts/pose_estimator_track_node_roi_v2.py；warmup_dir 指定包含本文件的样例目录。
+# native/tensorrt/compare_pose_backends.py --sample-dir 也读取本文件；相对资源路径基于本文件目录。
+# 该样例只用于 Server 启动时预热 GPU 推理链路，不作为业务推理结果。
+
+# 参考图中物体的 Label；必须存在于 assets/meshes/registry.yaml。
+label: wp_2
+
+# 参考彩色图。OpenCV 按 BGR 读取，进入 FoundationPose 前转换为 RGB。
+rgb: rgb.png
+
+# 参考深度图；实际单位由 depth_unit 指定。
+depth: depth.png
+
+# 参考物体 Mask；所有大于 0 的像素都视为目标前景。
+mask: mask.png
+
+# 采集该参考图时使用的 3x3 相机内参，用于和 Server 当前内参做一致性检查。
+camera_intrinsics: cam_K.txt
+
+# 深度图单位：mm 表示毫米，m 表示米。
+depth_unit: mm
+
+# Warmup 的姿态细化次数。1 次即可完成 Refiner 和 Scorer 的首次前向初始化。
+refine_iteration: 1

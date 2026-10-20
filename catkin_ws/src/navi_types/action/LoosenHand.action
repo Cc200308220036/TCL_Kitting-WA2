@@ -1,0 +1,10 @@
+# Goal
+string task_goal   # 任意传
+
+---
+# Result
+string success   # 任意传
+
+---
+# Feedback
+bool loosen_hand_flag  # True表示机器人末端附近 xx cm 内有 人的手，false则表示没有
